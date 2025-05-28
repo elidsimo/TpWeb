@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 2: Jeu de Devinettes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+        .message-box.info {
+            background-color: #e0f2fe; 
+            color: #0284c7; 
+        }
+        .message-box.success {
+            background-color: #dcfce7; 
+            color: #16a34a; 
+        }
+        .message-box.error {
+            background-color: #fee2e2; 
+            color: #ef4444; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8 flex flex-col items-center min-h-screen">
+    <div class="max-w-xl w-full bg-white p-6 sm:p-10 rounded-xl shadow-lg space-y-8">
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-green-700 mb-8">Exercice 2: Jeu de Devinettes</h1>
+
+        <section class="border border-green-200 p-6 rounded-lg bg-green-50 shadow-md">
+            <h2 class="text-2xl sm:text-3xl font-bold text-green-600 mb-4">Devinez le Nombre</h2>
+            <p class="text-gray-700 mb-4">
+                Devinez un nombre entre 1 et 10. Le jeu vous donnera des indices.
+            </p>
+            <button id="startEx2" class="w-full sm:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
+                Démarrer l'Exercice 2
+            </button>
+            <div id="ex2-message" class="message-box info hidden"></div>
+        </section>
+
+    </div>
+
+    <script>
+        // Fonction utilitaire pour afficher des messages sur la page
+        function displayMessage(elementId, message, type = 'info') {
+            const messageBox = document.getElementById(elementId);
+            if (messageBox) {
+                messageBox.textContent = message;
+                messageBox.className = `message-box ${type}`; // Réinitialise les classes
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        
+        document.getElementById('startEx2').addEventListener('click', () => {
+            displayMessage('ex2-message', 'Le jeu a commencé. Veuillez deviner le nombre.', 'info');
+            try {
+                const nombreADeviner = Math.floor(Math.random() * 10) + 1; // Nombre entre 1 et 10
+                let tentatives = 0;
+                let proposition;
+                let message = '';
+
+                // Boucle de jeu
+                while (true) {
+                    tentatives++;
+                    proposition = prompt(`Tentative ${tentatives}: Devinez le nombre entre 1 et 10.`);
+
+                    // Gérer l'annulation ou l'entrée vide
+                    if (proposition === null || proposition.trim() === '') {
+                        message = 'Jeu annulé. Vous n\'avez pas deviné le nombre.';
+                        displayMessage('ex2-message', message, 'error');
+                        return;
+                    }
+
+                    proposition = parseInt(proposition, 10);
+
+                    // Vérifier si l'entrée est un nombre valide
+                    if (isNaN(proposition) || proposition < 1 || proposition > 10) {
+                        message = 'Veuillez saisir un nombre valide entre 1 et 10.';
+                        displayMessage('ex2-message', message, 'error');
+                        // Ne pas incrémenter les tentatives pour une entrée invalide
+                        tentatives--;
+                        continue; // Demander à nouveau
+                    }
+
+                    if (proposition < nombreADeviner) {
+                        message = `Votre proposition (${proposition}) est plus petite. Essayez encore !`;
+                        displayMessage('ex2-message', message, 'info');
+                    } else if (proposition > nombreADeviner) {
+                        message = `Votre proposition (${proposition}) est plus grande. Essayez encore !`;
+                        displayMessage('ex2-message', message, 'info');
+                    } else {
+                        message = `Bravo ! Vous avez trouvé le nombre (${nombreADeviner}) en ${tentatives} tentative(s).`;
+                        displayMessage('ex2-message', message, 'success');
+                        break; // Sortir de la boucle
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'exercice 2 :", error);
+                displayMessage('ex2-message', 'Une erreur inattendue est survenue. Vérifiez la console.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

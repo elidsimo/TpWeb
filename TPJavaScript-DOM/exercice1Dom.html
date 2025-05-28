@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 1: Manipulation du DOM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8 flex flex-col items-center min-h-screen">
+    <div class="max-w-2xl w-full bg-white p-6 sm:p-10 rounded-xl shadow-lg space-y-6">
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-indigo-700 mb-8">Exercice 1: Manipulation du DOM</h1>
+
+        <section class="border border-indigo-200 p-6 rounded-lg bg-indigo-50 shadow-md">
+            <h2 class="text-2xl sm:text-3xl font-bold text-indigo-600 mb-4">Démonstration de Manipulation du DOM</h2>
+            <p class="text-gray-700 mb-4">
+                Cliquez sur la boîte ci-dessous pour voir le texte changer.
+            </p>
+
+            <div id="domContainer" class="p-6 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+                                        bg-gray-200 hover:bg-gray-300 border border-gray-300 flex justify-center items-center h-32">
+                <p id="domParagraph" class="text-lg font-semibold text-gray-700">Ceci est un paragraphe initial.</p>
+            </div>
+
+            <div id="dom-message" class="message-box info hidden mt-4"></div>
+        </section>
+
+    </div>
+
+    <script>
+        // Fonction utilitaire pour afficher des messages sur la page
+        function displayMessage(elementId, message, type = 'info') {
+            const messageBox = document.getElementById(elementId);
+            if (messageBox) {
+                messageBox.textContent = message;
+                messageBox.className = `message-box ${type} mt-4`; // Réinitialise les classes
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const domContainer = document.getElementById('domContainer');
+            const domParagraph = document.getElementById('domParagraph');
+
+            // 1. Création de la div et du paragraphe (déjà fait dans le HTML)
+            // La structure HTML est déjà en place pour cet exercice.
+
+            // 2. Modification du texte initial du paragraphe
+            domParagraph.textContent = "Le texte a été modifié.";
+            displayMessage('dom-message', 'Texte du paragraphe modifié avec succès.', 'success');
+
+            // 3. Modification du style CSS
+            domParagraph.style.backgroundColor = "lightblue";
+            domParagraph.style.textAlign = "center";
+            domParagraph.style.padding = "0.5rem"; // Ajout d'un peu de padding pour mieux voir le fond
+            domParagraph.style.borderRadius = "0.25rem"; // Arrondir les coins
+            displayMessage('dom-message', 'Style du paragraphe modifié (fond bleu clair, texte centré).', 'success');
+
+
+            // 4. Ajout d'un événement 'click' à la div
+            domContainer.addEventListener('click', () => {
+                domParagraph.textContent = "Un clic a été détecté.";
+                // Optionnel: changer la couleur de fond pour un feedback visuel
+                domContainer.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                domContainer.classList.add('bg-indigo-100', 'hover:bg-indigo-200');
+                displayMessage('dom-message', 'Clic détecté sur la div. Texte du paragraphe mis à jour.', 'info');
+            });
+        });
+    </script>
+</body>
+</html>

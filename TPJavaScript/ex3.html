@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 3: Quiz Interactif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+        .message-box.info {
+            background-color: #e0f2fe; 
+            color: #0284c7; 
+        }
+        .message-box.success {
+            background-color: #dcfce7; 
+            color: #16a34a; 
+        }
+        .message-box.error {
+            background-color: #fee2e2; 
+            color: #ef4444; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8 flex flex-col items-center min-h-screen">
+    <div class="max-w-xl w-full bg-white p-6 sm:p-10 rounded-xl shadow-lg space-y-8">
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-purple-700 mb-8">Exercice 3: Quiz Interactif</h1>
+
+        <section class="border border-purple-200 p-6 rounded-lg bg-purple-50 shadow-md">
+            <h2 class="text-2xl sm:text-3xl font-bold text-purple-600 mb-4">Lancez le Quiz !</h2>
+            <p class="text-gray-700 mb-4">
+                Testez vos connaissances avec ce quiz interactif.
+            </p>
+            <button id="startEx3" class="w-full sm:w-auto px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
+                Démarrer le Quiz
+            </button>
+            <div id="ex3-message" class="message-box info hidden"></div>
+        </section>
+
+    </div>
+
+    <script>
+        // Fonction utilitaire pour afficher des messages sur la page
+        function displayMessage(elementId, message, type = 'info') {
+            const messageBox = document.getElementById(elementId);
+            if (messageBox) {
+                messageBox.textContent = message;
+                messageBox.className = `message-box ${type}`; // Réinitialise les classes
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        
+        document.getElementById('startEx3').addEventListener('click', () => {
+            displayMessage('ex3-message', 'Le quiz a commencé. Veuillez répondre aux questions.', 'info');
+            try {
+                const QUESTIONS = [
+                    ["Quelle est la capitale de la France ?", "Paris"],
+                    ["Quel est le plus grand océan du monde ?", "Pacifique"],
+                    ["Combien de planètes compte notre système solaire ?", "8"],
+                    ["Quel est le plus haut sommet du monde ?", "Everest"],
+                    ["Quel est le symbole chimique de l'eau ?", "H2O"]
+                ];
+
+                let score = 0;
+                const totalQuestions = QUESTIONS.length;
+                let quizResults = []; // Pour stocker les résultats de chaque question
+
+                for (let i = 0; i < totalQuestions; i++) {
+                    const question = QUESTIONS[i][0];
+                    const reponseCorrecte = QUESTIONS[i][1].toLowerCase(); // Convertir en minuscules pour comparaison insensible à la casse
+
+                    let reponseUtilisateur = prompt(`${i + 1}/${totalQuestions}: ${question}`);
+
+                    // Gérer l'annulation ou l'entrée vide
+                    if (reponseUtilisateur === null) {
+                        displayMessage('ex3-message', 'Quiz annulé. Votre score est incomplet.', 'error');
+                        return; // Sortir de la fonction
+                    }
+                    reponseUtilisateur = reponseUtilisateur.trim().toLowerCase();
+
+                    let isCorrect = false;
+                    if (reponseUtilisateur === reponseCorrecte) {
+                        quizResults.push(`Question ${i + 1}: Réponse juste !`);
+                        score++;
+                        isCorrect = true;
+                    } else {
+                        quizResults.push(`Question ${i + 1}: Réponse fausse. La bonne réponse était "${QUESTIONS[i][1]}".`);
+                    }
+                    // Afficher un feedback immédiat (peut être omis si l'on ne veut que le score final)
+                    displayMessage('ex3-message', isCorrect ? "Réponse juste !" : `Réponse fausse. La bonne réponse était "${QUESTIONS[i][1]}".`, isCorrect ? 'success' : 'error');
+                }
+
+                // Affichage des résultats finaux
+                const finalMessage = `Quiz terminé ! Vous avez répondu correctement à ${score} question(s) sur ${totalQuestions}.`;
+                displayMessage('ex3-message', finalMessage, score === totalQuestions ? 'success' : 'info');
+
+                // Afficher les détails dans la console
+                console.log(`--- Résultats du Quiz ---`);
+                quizResults.forEach(result => console.log(result));
+                console.log(finalMessage);
+                console.log(`-------------------------`);
+
+            } catch (error) {
+                console.error("Erreur lors de l'exercice 3 :", error);
+                displayMessage('ex3-message', 'Une erreur inattendue est survenue. Vérifiez la console.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

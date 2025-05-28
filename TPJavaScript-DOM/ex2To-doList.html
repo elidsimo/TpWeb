@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 2: To-do list</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .task-completed {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+        .message-box.info {
+            background-color: #e0f2fe; 
+            color: #0284c7; 
+        }
+        .message-box.success {
+            background-color: #dcfce7; 
+            color: #16a34a; 
+        }
+        .message-box.error {
+            background-color: #fee2e2; 
+            color: #ef4444;/
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8 flex flex-col items-center min-h-screen">
+    <div class="max-w-2xl w-full bg-white p-6 sm:p-10 rounded-xl shadow-lg space-y-6">
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-teal-700 mb-8">Exercice 2: To-do list</h1>
+
+        <section class="border border-teal-200 p-6 rounded-lg bg-teal-50 shadow-md">
+            <h2 class="text-2xl sm:text-3xl font-bold text-teal-600 mb-4">Ma Liste de Tâches</h2>
+
+            <form id="todoForm" class="flex flex-col sm:flex-row gap-4 mb-6">
+                <input type="text" id="taskInput" placeholder="Ajouter une nouvelle tâche..."
+                       class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-700"
+                       aria-label="Nouvelle tâche">
+                <button type="submit"
+                        class="w-full sm:w-auto px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-md
+                               hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-75
+                               transition duration-300 ease-in-out">
+                    Ajouter Tâche
+                </button>
+            </form>
+
+            <ul id="taskList" class="space-y-3">
+                </ul>
+
+            <div id="todo-message" class="message-box info hidden"></div>
+        </section>
+
+    </div>
+
+    <script>
+        // Fonction utilitaire pour afficher des messages sur la page
+        function displayMessage(elementId, message, type = 'info') {
+            const messageBox = document.getElementById(elementId);
+            if (messageBox) {
+                messageBox.textContent = message;
+                messageBox.className = `message-box ${type} mt-4`; // Réinitialise les classes
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const todoForm = document.getElementById('todoForm');
+            const taskInput = document.getElementById('taskInput');
+            const taskList = document.getElementById('taskList');
+
+            // Fonction pour ajouter une tâche
+            function addTask(taskText) {
+                if (taskText.trim() === "") {
+                    displayMessage('todo-message', 'Veuillez saisir une tâche.', 'error');
+                    return;
+                }
+
+                // Créer l'élément li pour la tâche
+                const listItem = document.createElement('li');
+                listItem.className = "flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm";
+
+                // Créer le span pour le texte de la tâche
+                const taskSpan = document.createElement('span');
+                taskSpan.textContent = taskText;
+                taskSpan.className = "flex-grow text-gray-800";
+
+                // Créer le conteneur pour les boutons
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = "flex space-x-2 ml-4";
+
+                // Bouton "Accomplie"
+                const completeButton = document.createElement('button');
+                completeButton.textContent = "Accomplie";
+                completeButton.className = "px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-md hover:bg-green-600 transition duration-200 ease-in-out";
+                completeButton.addEventListener('click', () => {
+                    taskSpan.classList.toggle('task-completed');
+                    displayMessage('todo-message', `Tâche "${taskText}" marquée comme ${taskSpan.classList.contains('task-completed') ? 'accomplie' : 'non accomplie'}.`, 'info');
+                });
+
+                // Bouton "Supprimer"
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Supprimer";
+                deleteButton.className = "px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-md hover:bg-red-600 transition duration-200 ease-in-out";
+                deleteButton.addEventListener('click', () => {
+                    taskList.removeChild(listItem);
+                    displayMessage('todo-message', `Tâche "${taskText}" supprimée.`, 'success');
+                });
+
+                // Ajouter les éléments au DOM
+                buttonContainer.appendChild(completeButton);
+                buttonContainer.appendChild(deleteButton);
+                listItem.appendChild(taskSpan);
+                listItem.appendChild(buttonContainer);
+                taskList.appendChild(listItem);
+
+                taskInput.value = ""; // Vider le champ de saisie
+                displayMessage('todo-message', `Tâche "${taskText}" ajoutée.`, 'success');
+            }
+
+            // Gérer la soumission du formulaire
+            todoForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Empêcher le rechargement de la page
+                addTask(taskInput.value);
+            });
+        });
+    </script>
+</body>
+</html>

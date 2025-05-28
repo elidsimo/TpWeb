@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 1: Opérations Mathématiques</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+        .message-box.info {
+            background-color: #e0f2fe; 
+            color: #46acdf; 
+        }
+        .message-box.success {
+            background-color: #dcfce7; 
+            color: #1aa34c; 
+        }
+        .message-box.error {
+            background-color: #fee2e2; 
+            color: #ef4444; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8 flex flex-col items-center min-h-screen">
+    <div class="max-w-xl w-full bg-white p-6 sm:p-10 rounded-xl shadow-lg space-y-8">
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-700 mb-8">Exercice 1: Opérations Mathématiques</h1>
+
+        <section class="border border-blue-200 p-6 rounded-lg bg-blue-50 shadow-md">
+            <h2 class="text-2xl sm:text-3xl font-bold text-blue-600 mb-4">Calculatrice Simple</h2>
+            <p class="text-gray-700 mb-4">
+                Ce script demandera deux nombres et affichera leur somme, différence, produit et quotient dans la <strong>console du navigateur</strong>.
+                Ouvrez la console (F12 ou Clic droit > Inspecter > Console) pour voir les résultats.
+            </p>
+            <button id="startEx1" class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
+                Démarrer l'Exercice 1
+            </button>
+            <div id="ex1-message" class="message-box info hidden"></div>
+        </section>
+
+    </div>
+
+    <script>
+        // Fonction utilitaire pour afficher des messages sur la page
+        function displayMessage(elementId, message, type = 'info') {
+            const messageBox = document.getElementById(elementId);
+            if (messageBox) {
+                messageBox.textContent = message;
+                messageBox.className = `message-box ${type}`; // Réinitialise les classes
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        
+        document.getElementById('startEx1').addEventListener('click', () => {
+            displayMessage('ex1-message', 'Veuillez saisir les nombres via les boîtes de dialogue.', 'info');
+            try {
+                let num1 = prompt("Veuillez saisir le premier nombre :");
+                // Vérifie si l'utilisateur a annulé la saisie ou entré une valeur vide
+                if (num1 === null || num1.trim() === '') {
+                    displayMessage('ex1-message', 'Opération annulée ou nombre non saisi.', 'error');
+                    return;
+                }
+                num1 = parseFloat(num1);
+
+                let num2 = prompt("Veuillez saisir le deuxième nombre :");
+                if (num2 === null || num2.trim() === '') {
+                    displayMessage('ex1-message', 'Opération annulée ou nombre non saisi.', 'error');
+                    return;
+                }
+                num2 = parseFloat(num2);
+
+                // Vérifie si les entrées sont des nombres valides
+                if (isNaN(num1) || isNaN(num2)) {
+                    displayMessage('ex1-message', 'Veuillez saisir des nombres valides.', 'error');
+                    return;
+                }
+
+                const sum = num1 + num2;
+                const difference = num1 - num2;
+                const product = num1 * num2;
+                const quotient = num2 !== 0 ? num1 / num2 : "Division par zéro impossible";
+
+                console.log(`--- Résultats Exercice 1 ---`);
+                console.log(`Premier nombre: ${num1}`);
+                console.log(`Deuxième nombre: ${num2}`);
+                console.log(`Somme: ${sum}`);
+                console.log(`Différence: ${difference}`);
+                console.log(`Produit: ${product}`);
+                console.log(`Quotient: ${quotient}`);
+                console.log(`-----------------------------`);
+
+                displayMessage('ex1-message', 'Les résultats ont été affichés dans la console du navigateur.', 'success');
+
+            } catch (error) {
+                console.error("Erreur lors de l'exercice 1 :", error);
+                displayMessage('ex1-message', 'Une erreur inattendue est survenue. Vérifiez la console.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
