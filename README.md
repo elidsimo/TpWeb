@@ -1,4 +1,4 @@
-# TP - [Programmation web]
+# TP - Programmation web
 
 Ce dépôt contient le code et les fichiers du travail pratique réalisé dans le cadre du cours.
 
@@ -10,4 +10,4 @@ Ce dépôt contient le code et les fichiers du travail pratique réalisé dans l
 
 
 ## Auteur
-- **Nom :**  MOHAMED EL-IDRYSY
+-  MOHAMED EL-IDRYSY
